@@ -72,9 +72,9 @@ console.log(new Date().toLocaleTimeString()+ ' ' + 'start');
     ![Image](s.png)
 - Nhìn vào sơ đồ ta ta thấy có các thành phần như sau:
 1. Stack: là cấu trúc kiểu ngăn xếp chứa các khối lệnh được chạy
-2. Nơi đăng kí các sự kiện
-3. Event queue là hàng đợi chứa các câu lệnh được trả về sau khi hoàn thành một tác vụ nào đó(như các setTimeout, promise, các sự kiện click ...)
-4. Event loop lặp liên tục kiểm tra xem stack có rỗng không nếu rỗng sẽ đẩy các lệnh dưới event queue lên.
+2. Event table: Nơi đăng kí các sự kiện(như các hàm setTimeout, promise, các sự kiện click ...)
+3. Event queue là hàng đợi chứa các câu lệnh được trả về sau khi hoàn thành một tác vụ nào đó
+4. Event loop: lặp liên tục kiểm tra xem stack có rỗng không nếu rỗng sẽ đẩy các lệnh dưới event queue lên.
 - Với đoạn code trên được giải thích như sau:
 - Đoạn code trong chương trình chạy tuần tự từ đầu đến cuối
 - Đầu tiên nó gọi hàm main() trong hàm main() gặp câu lệnh 
