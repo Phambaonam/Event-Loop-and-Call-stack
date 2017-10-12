@@ -22,8 +22,8 @@ now('> finish waiting');
 ```
 * Sau khi chạy chương trình thì ta có kết quả như sau:
 ```javascript
-11:09:12 PM > start to wait
-11:09:17 PM > finish waiting
+    11:09:12 PM > start to wait
+    11:09:17 PM > finish waiting
 - ta thấy khoảng cách từ khi bắt đầu và kết thúc chương trình là 5s và 5s này chính là thời gian hàm wait(5000) hoàn thành.
 ```
 * Như vậy từ ví dụ trên ta có thể thấy hàm wait(5000) đã ngăn tất cả các hàm phía sau nó => đây là blocking trong Javascript và nó sử dụng một Call stack (theo cơ chế vào sau ra trước)cơ chế của nó hoạt động như sau:
@@ -48,12 +48,28 @@ Vì đây là 3 câu lệnh chạy hoàn toàn tách biệt không có sự liê
         })
         now('> Ket thuc')
 - Kết quả in ra như sau:
-11:51:20 PM > Bat dau tac vu
-11:51:20 PM > Ket thuc
-11:51:20 PM > DO this task at the end of event queue
+       11:51:20 PM > Bat dau tac vu
+       11:51:20 PM > Ket thuc
+       11:51:20 PM > DO this task at the end of event queue
 
 ```
-- Chúng ta cùng theo dõi thứ tự hoạt động của các dòng lệnh trong call stack
+- Như vậy nhìn vào kết quả trên ta thấy các lệnh trong hàm process.nextTich() được thực hiện sau cùng.
+- Ta xét một ví dụ tiếp theo
+```javascript
+console.log(new Date().toLocaleTimeString()+ ' ' + 'start');
+ setTimeout(function () {
+     console.log(new Date().toLocaleTimeString()+ ' ' + 'waitting...')
+ },2000);
+ console.log(new Date().toLocaleTimeString()+ ' ' + 'end
+- Kết quả in ra như sau:
+       9:47:20 AM start
+       9:47:20 AM end
+       9:47:22 AM waitting...   
+```
+- Ta thấy kết quả tương tự như ở trên và lý do được giải thích như sau:
+* Trạng thái hoạt động
+    ![Image](s.png)
+
 
 
 
