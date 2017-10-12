@@ -33,10 +33,11 @@ now('> finish waiting');
 3. now('> finish waiting')
 Vì đây là 3 câu lệnh chạy hoàn toàn tách biệt không có sự liên quan đến nhau nên khi đưa từng lệnh vào call stack thì nó sẽ thực hiện ngay và đi ra khỏi call stack để nhường chỗ cho lệnh tiếp theo.
 - đầu tiên gọi hàm now('> start to wait') đưa hàm này vào call stack do hàm này chỉ có lệnh log ra thời gian và text nên sau khi log xong thì nó sẽ được lấy ra khỏi stack
-- tiếp theo gọi hàm wait(5000) hàm này chạy 5s sau thì hoàn thành sau khi hoàn thành thì cũng bị lấy ra khỏi stack
+- tiếp theo gọi hàm wait(5000) hàm này chạy 5s sau thì hoàn thành sau khi hoàn thành và trong stack lúc này là trống
 - cuối cùng gọi tiếp hàm now('> finish waiting') hàm này cũng chỉ log ra thời gian thực hiện do vậy sau khi thực hiện xong thì nó bị lấy ra khỏi stack trong stack lúc này còn hàm main() và không còn dòng code nào nữa nên hàm main() cũng bị xóa luôn khỏi stack
+=> đây là cơ chế xứ lý blocking của javascript như ta thấy nó có nhược điểm là chỉ cần có 1 tác vụ nào đó có thời gian xử lý lâu thì tất cả các đoạn tác vụ đằng sau nó sẽ bị chặn không thực hiện được để giải quyết vấn đề này ta tìm hiểu khái niệm Event loop dưới đây
 ## Event Loop
-* Như vậy trên đây là toàn bộ cơ chế xử lý blocking của javascript như ta thấy nó có nhược điểm là chỉ cần có 1 tác vụ nào đó có thời gian xử lý lâu thì tất cả các đoạn code đằng sau nó sẽ bị chặn không thực hiện được do vậy ta phải nên tránh blocking, nhưng tránh như thế nào? Như ta đã biết trong javascript cung cấp một cơ chế bất đồng bộ thông qua các hàm callback và một cơ chế được sử dụng đó là "event loop". Chúng ta cùng tìm hiểu xử lý bất đồng bộ trong javascript và cơ chế "event loop" qua các ví dụ dưới đây.
+* Như ở trên là cơ chế xử lý blocking của javascript ta thấy nó có nhược điểm là chỉ cần có 1 tác vụ nào đó có thời gian xử lý lâu thì tất cả các đoạn code đằng sau nó sẽ bị chặn không thực hiện được do vậy ta phải nên tránh blocking, nhưng tránh như thế nào? Như ta đã biết trong javascript cung cấp một cơ chế bất đồng bộ thông qua các hàm callback và một cơ chế được sử dụng đó là "event loop". Chúng ta cùng tìm hiểu xử lý bất đồng bộ trong javascript và cơ chế "event loop" qua các ví dụ dưới đây.
 - cho một chương trình như sau:
 ```javascript
     function now(txt) {
