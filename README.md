@@ -66,9 +66,46 @@ console.log(new Date().toLocaleTimeString()+ ' ' + 'start');
        9:47:20 AM end
        9:47:22 AM waitting...   
 ```
-- Ta thấy kết quả tương tự như ở trên và lý do được giải thích như sau:
+
 * Trạng thái hoạt động
     ![Image](s.png)
+- Nhìn vào sơ đồ ta ta thấy có các thành phần như sau:
+1. Stack: là cấu trúc kiểu ngăn xếp chứa các khối lệnh được chạy
+2. Nơi đăng kí các sự kiện
+3. Event queue là hàng đợi chứa các câu lệnh được trả về sau khi hoàn thành một tác vụ nào đó(như các setTimeout, promise, các sự kiện click ...)
+4. Event loop lặp liên tục kiểm tra xem stack có rỗng không nếu rỗng sẽ đẩy các lệnh dưới event queue lên.
+- Với đoạn code trên được giải thích như sau:
+- Đoạn code trong chương trình chạy tuần tự từ đầu đến cuối
+- Đầu tiên nó gọi hàm main() trong hàm main() gặp câu lệnh 
+    "console.log('start')" với câu lệnh này nó được đưa vào trong stack được lấy ra ngay và thực thi luôn câu lệnh log('start') trong stack lúc này chỉ có hàm main().
+- Tiếp theo nó gặp hàm setTimeout(cb,2000) nhưng hàm này không được đưa vào stack mà được đưa sang event table và trong quá trình chờ kết thúc 2s thì nó gọi luôn câu lệnh tiếp theo là "console.log('end')" lệnh này được đưa vào stack và nó bị lấy ra và thực hiện ngay => log ra màn hình "end"
+- Sau khi kết thúc 2s thì setTimeout(cb,2000) trả về 1 hàm cb và hàm này được đẩy xuống event queue tại đây nó được event loop kiểm tra xem hàng đợi có rỗng không lúc này hàng đợi đang rỗng nên nó sẽ đẩy hàm cb từ dưới Event queue lên Stack và thực thi câu lệnh in đoạn text "waitting..."
+- Giả sử ta có một đoạn code khác như sau:
+```javascript
+    console.log(new Date().toLocaleTimeString()+ ' ' +'start')
+setTimeout(function () {
+    console.log(new Date().toLocaleTimeString()+ ' ' +'there1')
+},1000)
+setTimeout(function () {
+    console.log(new Date().toLocaleTimeString()+ ' ' +'there2')
+}, 2000);
+setTimeout(function () {
+    console.log(new Date().toLocaleTimeString()+ ' ' +'there3')
+}, 1000)
+console.log(new Date().toLocaleTimeString()+ ' ' +'end')
+
+- kết quả in ra như sau:
+    11:20:44 AM start
+    11:20:44 AM end
+    11:20:45 AM there1
+    11:20:45 AM there3
+    11:20:46 AM there2
+
+```
+- Như vậy 2 câu lệnh log vẫn thực được thực thi trước còn lại 3 hàm setTimeout() sẽ lần lượt được đưa vào event table chương trình được thực thi rất nhanh nên ta cảm nhận cả 3 hàm setTimeout(1000),setTimeout(2000),setTimeout(1000) được thực hiện tại cùng 1 thời điểm trong event table và ở đây có 2 hàm setTimeout(1000) nhưng hàm đầu tiên vào trước nên nó sẽ xong trước rồi đẩy xuống event queue trước và hàm setTimeout(1000) thứ 2 do thứ tự sau nên nó sẽ đứng sát hàm setTimeout(1000) thứ nhất chính vì như vậy mới có kết quả như trên
+
+
+
 
 
 
